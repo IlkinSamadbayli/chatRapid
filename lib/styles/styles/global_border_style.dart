@@ -10,20 +10,20 @@ class GlobalBorderStyle {
   static BorderRadius get borderRadius40 => BorderRadius.circular(40);
 
   static InputBorder get borderStyle => OutlineInputBorder(
-        borderRadius: borderRadius16,
+        borderRadius: borderRadius12,
         borderSide: BorderSide(
           color: AppColor.focusColor,
         ),
       );
 
   static InputBorder get focusBorderStyle => OutlineInputBorder(
-        borderRadius: borderRadius16,
+        borderRadius: borderRadius12,
         borderSide: BorderSide(
           color: AppColor.mainColor,
         ),
       );
   static InputBorder get errorBorderStyle => OutlineInputBorder(
-        borderRadius: borderRadius16,
+        borderRadius: borderRadius12,
         borderSide: BorderSide(
           color: AppColor.errorColor,
         ),
@@ -34,7 +34,7 @@ class GlobalBorderStyle {
           color: AppColor.primaryColor,
         ),
       );
-  static InputDecoration kInputDecoration(String labelText) => InputDecoration(
+  static kInputDecoration(String labelText) => InputDecoration(
       labelText: labelText,
       enabledBorder: enabledBorderStyle,
       focusedBorder: focusBorderStyle,
