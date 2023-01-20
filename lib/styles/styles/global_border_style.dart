@@ -16,10 +16,11 @@ class GlobalBorderStyle {
         ),
       );
 
-  static InputBorder get focusBorderStyle => OutlineInputBorder(
+  static InputBorder focusBorderStyle({required bool isCorrect}) =>
+      OutlineInputBorder(
         borderRadius: borderRadius12,
         borderSide: BorderSide(
-          color: AppColor.mainColor,
+          color: isCorrect ? AppColor.mainColor : AppColor.errorColor,
         ),
       );
   static InputBorder get errorBorderStyle => OutlineInputBorder(
@@ -34,10 +35,10 @@ class GlobalBorderStyle {
           color: AppColor.primaryColor,
         ),
       );
-  static kInputDecoration(String labelText) => InputDecoration(
+  static kInputDecoration(String labelText, bool isCorrect) => InputDecoration(
       labelText: labelText,
       enabledBorder: enabledBorderStyle,
-      focusedBorder: focusBorderStyle,
+      focusedBorder: focusBorderStyle(isCorrect: isCorrect),
       errorBorder: errorBorderStyle,
       border: borderStyle);
 }

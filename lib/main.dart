@@ -1,15 +1,20 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media/home_page.dart';
 import 'package:social_media/pages/auth/login_page.dart';
+import 'package:social_media/provider/onchanged_provider.dart';
 
 import 'helper/helper_function.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => OnchangedProvider(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
