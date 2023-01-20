@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:social_media/service/database_service.dart';
 
-class RegisterService {
+class AuthService {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   Future registerUserwithEmailAndPassword(
@@ -10,10 +11,11 @@ class RegisterService {
               email: email, password: password))
           .user!;
       if (user != null) {
+        await DataBaseService(uid: user.uid).updateUserData(email, fullName);
         return true;
       }
     } on FirebaseAuthException catch (e) {
-      print(e);
+      return e.message;
     }
   }
 }
