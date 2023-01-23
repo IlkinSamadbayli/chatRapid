@@ -1,12 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media/global_widgets.dart/global_validators.dart';
+import 'package:social_media/home_page.dart';
 import 'package:social_media/pages/auth/register_page.dart';
 import 'package:social_media/provider/onchanged_provider.dart';
+import 'package:social_media/service/auth_service.dart';
+import 'package:social_media/service/database_service.dart';
 import 'package:social_media/styles/styles/custom_text_style.dart';
 import '../../global_widgets.dart/global_input.dart';
+import '../../helper/helper_function.dart';
 import '../../styles/colors/app_colors.dart';
 
 class LoginPage extends StatefulWidget {
@@ -109,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16))),
                             onPressed: () {
-                              onTap;
+                              login;
                             },
                             child: const Text(
                               "Sign in",
@@ -141,10 +147,32 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  get onTap {
+  get login async {
+    AuthService authService = AuthService();
+
     if (formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
+      });
+      await authService
+          .loginUserwithEmailAndPassword(email, password)
+          .then((value) async {
+        if (value == true) {
+          QuerySnapshot snapshot =
+              await DataBaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+                  .gettingUserData(email);
+
+          await HelperFunction.saveUserLoggedInStatus(true);
+          await HelperFunction.saveUserEmail(emailController.text);
+          await HelperFunction.saveUserName(snapshot.docs[0]['fullName']);
+          Get.to(() => const HomePage());
+        } else {
+          Get.snackbar('Error', 'Something went wrong',
+              backgroundColor: AppColor.errorColor);
+          setState(() {
+            _isLoading = false;
+          });
+        }
       });
     }
   }
