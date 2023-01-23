@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media/global_widgets.dart/global_input.dart';
 import 'package:social_media/global_widgets.dart/global_validators.dart';
+import 'package:social_media/helper/helper_function.dart';
+import 'package:social_media/home_page.dart';
 import 'package:social_media/provider/onchanged_provider.dart';
 import 'package:social_media/service/auth_service.dart';
 
@@ -170,24 +172,27 @@ class _RegisterPageState extends State<RegisterPage> {
       await authService
           .registerUserwithEmailAndPassword(emailController.text,
               nameController.text, passwordController.text)
-          .then((value) => {
-                if (value == true)
-                  {
-                    Get.snackbar('Successfull!', 'You have a new profile',
-                        backgroundColor: AppColor.mainColor),
-                  }
-                else
-                  {
-                    Get.snackbar('Error', 'Try again',
-                        backgroundColor: AppColor.errorColor),
-                  },
-                setState(() {
-                  _isLoading = false;
-                }),
-              });
+          .then((value) async {
+        return {
+          if (value == true)
+            {
+              Get.snackbar('Successfull!', 'You have a new profile',
+                  backgroundColor: AppColor.mainColor),
+              await HelperFunction.saveUserLoggedInStatus(true),
+              await HelperFunction.saveUserEmail(emailController.text),
+              await HelperFunction.saveUserName(nameController.text),
+              Get.to(() => const HomePage()),
+            }
+          else
+            {
+              Get.snackbar('Error', 'Something went wrong',
+                  backgroundColor: AppColor.errorColor),
+            },
+          setState(() {
+            _isLoading = false;
+          }),
+        };
+      });
     }
-    nameController.clear();
-    emailController.clear();
-    passwordController.clear();
   }
 }
